@@ -69,7 +69,8 @@ void CGenerateRoom::Show(bool bAllTiles)
 		string* allTiles = new string[roomSize*roomSize*iter->second.size()];
 		for (int i = 0; i < roomSize*roomSize; ++i)
 		{
-			std::map<int, std::vector<string>>::iterator iter = tiles_container.find(room[i]);
+			int key = room[i] * 10 + (rand() % 2);
+			std::map<int, std::vector<string>>::iterator iter = tiles_container.find(key);
 			if (iter == tiles_container.end())
 				return;
 
@@ -90,6 +91,7 @@ void CGenerateRoom::Show(bool bAllTiles)
 				int curIdx = row * roomSize + (j / sqrtSize);
 				int jIdx = j % sqrtSize;
 				string cur = allTiles[curIdx * containerSize + (remainValue * sqrtSize + jIdx)];
+				cur = ExChangeUniqueTile(cur);
 				std::cout << cur;
 			}
 			std::cout << std::endl;
@@ -188,7 +190,7 @@ void CGenerateRoom::GenerateTilesShape()
 		int shapeType = rand() % 2;
 		int shape = 0 == shapeType ? 3 : 4;
 		room[roomIdx] = shape;
-		if (shape == 4 && row == 3)
+		if (shape == 4 && row == (roomSize - 1))
 			bFindExit = true;
 	}
 	else
@@ -201,7 +203,7 @@ void CGenerateRoom::GenerateTilesShape()
 			int shapeType = rand() % 3;
 			int shape = 2 == shapeType ? shapeType + 2 : shapeType + 1;
 			room[roomIdx] = shape;
-			if (shape == 4 && row == 3)
+			if (shape == 4 && row == (roomSize - 1))
 				bFindExit = true;
 		}
 	}
@@ -211,4 +213,22 @@ void CGenerateRoom::FindXYPath(int idx, int& column, int& row)
 {
 	column = idx % roomSize;
 	row = idx / roomSize;
+}
+
+string CGenerateRoom::ExChangeUniqueTile(const string& Tile)
+{
+	string ret = Tile;
+	if (Tile == "2")
+	{
+		int value = rand() % 100;
+		if (30 < value)
+			ret = "0";
+	}
+	else if (Tile == "g")
+	{
+		int value = rand() % 100;
+		if (50 < value)
+			ret = "0";
+	}
+	return ret;
 }

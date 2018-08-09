@@ -26,6 +26,7 @@ private:
 	void GenerateTilesShape();
 
 	void FindXYPath(int idx, int& column, int& row);
+	string ExChangeUniqueTile(const string& Tile);
 
 private:
 	bool bFindExit = false;

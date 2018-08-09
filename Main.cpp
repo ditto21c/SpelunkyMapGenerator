@@ -9,11 +9,15 @@ void main()
 
 	CCsvLoader loader;
 	char buffer[11];
-	for (int i=0; i<5; ++i)
+	for (int j = 0; j < 2; ++j)
 	{
-		std::snprintf(buffer, 11, "Tile%d0.csv", i);
-		std::vector<string> tiles = loader.LoadFile(buffer);
-		tiles_container.insert(std::pair<int, std::vector<string>>(i, tiles));
+		for (int i = 0; i < 5; ++i)
+		{
+			std::snprintf(buffer, 11, "Tile%d%d.csv", i, j);
+			std::vector<string> tiles = loader.LoadFile(buffer);
+			int key = i * 10 + j;
+			tiles_container.insert(std::pair<int, std::vector<string>>(key, tiles));
+		}
 	}
 
 	CGenerateRoom generateRoom;
@@ -22,8 +26,8 @@ void main()
 	generateRoom.Generate(5);
 	generateRoom.Show(true);
 	
-	for(int i=0; i<4; ++i)
-		cout << endl;
+	//for(int i=0; i<1; ++i)
+	cout << endl;
 
 	generateRoom.Show(false);
 }
