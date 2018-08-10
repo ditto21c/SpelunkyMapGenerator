@@ -38,7 +38,12 @@ void CGenerateRoom::Generate(int roomSize)
 
 	while (!bFindExit)
 	{
-		GenerateTilesPath();
+		bool bExceptAllPath = GenerateTilesPath();
+		if (bExceptAllPath)
+		{
+			room[preIdx] = 4;
+			break;
+		}
 		GenerateTilesShape();
 	}
 
@@ -148,20 +153,20 @@ void CGenerateRoom::GenerateFirstTilesShape()
 	room[row*roomSize + column] = 1;
 }
 
-void CGenerateRoom::GenerateTilesPath()
+bool CGenerateRoom::GenerateTilesPath()
 {
 	preIdx = curIdx;
 	int next_move_idx = rand() % 5;
 	if (next_move_idx < 2)
 	{
-		if (curIdx % roomSize == 0)
+		if ((curIdx % roomSize) == 0)
 			curIdx += roomSize;
 		else
 			curIdx -= 1;
 	}
-	else if (next_move_idx < roomSize)
+	else if (next_move_idx < 4)
 	{
-		if (curIdx % roomSize == roomSize -1)
+		if ((curIdx % roomSize) == (roomSize -1))
 			curIdx += roomSize;
 		else
 			curIdx += 1;
@@ -170,6 +175,7 @@ void CGenerateRoom::GenerateTilesPath()
 	{
 		curIdx += roomSize;
 	}
+	return roomSize*roomSize < curIdx;
 }
 
 void CGenerateRoom::GenerateTilesShape()
@@ -177,13 +183,14 @@ void CGenerateRoom::GenerateTilesShape()
 	if (curIdx - roomSize == preIdx) // down
 	{
 		// ÀÌÀü ÀÎµ¦½º ·ë ÇüÅÂ º¯È¯
-		int column, row;
+		/*int column, row;
 		FindXYPath(preIdx, column, row);
 		int roomIdx = row*roomSize + column;
 		if (room[roomIdx] == 1)
 			room[roomIdx] = 2;
 		else if (room[roomIdx] == 4)
 			room[roomIdx] = 3;
+		
 
 		FindXYPath(curIdx, column, row);
 		roomIdx = row*roomSize + column;
@@ -192,10 +199,24 @@ void CGenerateRoom::GenerateTilesShape()
 		room[roomIdx] = shape;
 		if (shape == 4 && row == (roomSize - 1))
 			bFindExit = true;
+			*/
+
+		if (room[preIdx] == 1)
+			room[preIdx] = 2;
+		else if (room[preIdx] == 4)
+			room[preIdx] = 3;
+
+		int column, row;
+		FindXYPath(curIdx, column, row);
+		int shapeType = rand() % 2;
+		int shape = 0 == shapeType ? 3 : 4;
+		room[curIdx] = shape;
+		if (shape == 4 && row == (roomSize - 1))
+			bFindExit = true;
 	}
 	else
 	{
-		int column, row;
+		/*int column, row;
 		FindXYPath(curIdx, column, row);
 		int roomIdx = row*roomSize + column;
 		if (room[roomIdx] == -1)
@@ -203,6 +224,19 @@ void CGenerateRoom::GenerateTilesShape()
 			int shapeType = rand() % 3;
 			int shape = 2 == shapeType ? shapeType + 2 : shapeType + 1;
 			room[roomIdx] = shape;
+			if (shape == 4 && row == (roomSize - 1))
+				bFindExit = true;
+		}
+		*/
+
+		int column, row;
+		FindXYPath(curIdx, column, row);
+		//int roomIdx = row*roomSize + column;
+		if (room[curIdx] == -1)
+		{
+			int shapeType = rand() % 3;
+			int shape = 2 == shapeType ? shapeType + 2 : shapeType + 1;
+			room[curIdx] = shape;
 			if (shape == 4 && row == (roomSize - 1))
 				bFindExit = true;
 		}

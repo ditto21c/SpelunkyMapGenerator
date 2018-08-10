@@ -22,7 +22,7 @@ private:
 	void GenerateFirstTilesPath();
 	void GenerateFirstTilesShape();
 
-	void GenerateTilesPath();
+	bool GenerateTilesPath();
 	void GenerateTilesShape();
 
 	void FindXYPath(int idx, int& column, int& row);

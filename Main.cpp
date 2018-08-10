@@ -22,8 +22,8 @@ void main()
 
 	CGenerateRoom generateRoom;
 	generateRoom.SetTilesContainer(tiles_container);
-	//generateRoom.SetRandomSeed(GetTickCount());
-	generateRoom.Generate(5);
+	generateRoom.SetRandomSeed(GetTickCount());
+	generateRoom.Generate(4);
 	generateRoom.Show(true);
 	
 	//for(int i=0; i<1; ++i)
